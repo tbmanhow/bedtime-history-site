@@ -1156,9 +1156,10 @@ section {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.28;
-  filter: grayscale(0.2) saturate(1.12) contrast(1.12);
-  transform: scale(1.05);
+  object-position: center 18%;
+  opacity: 0.5;
+  filter: saturate(1.02) contrast(1.02);
+  transform: scale(1.02);
 }
 
 .cinema-grain {
@@ -1982,6 +1983,7 @@ section {
 .cinema-device-shelf {
   display: grid;
   gap: 18px;
+  align-items: start;
 }
 
 .cinema-feature-card {
@@ -2004,13 +2006,25 @@ section {
 .cinema-feature-card img {
   width: 100%;
   height: 100%;
+  display: block;
   object-fit: cover;
+  object-position: center center;
+}
+
+.cinema-feature-primary img {
+  object-position: center center;
+}
+
+.cinema-feature-secondary img {
+  object-position: center top;
 }
 
 .cinema-feature-copy {
   position: absolute;
   inset: auto 24px 24px;
   z-index: 2;
+  display: grid;
+  gap: 8px;
 }
 
 .cinema-feature-copy span {
@@ -2029,7 +2043,7 @@ section {
 }
 
 .cinema-feature-copy p {
-  margin-top: 10px;
+  margin-top: 6px;
   color: rgba(255, 248, 244, 0.8);
 }
 
@@ -2307,6 +2321,31 @@ section {
 
   .newsletter-panel {
     align-items: center;
+  }
+}
+
+@media (max-width: 859px) {
+  .cinema-hero-inner {
+    min-height: auto;
+    padding-top: 44px;
+    gap: 18px;
+  }
+
+  .cinema-feature-card {
+    min-height: 320px;
+  }
+
+  .cinema-feature-copy {
+    inset: auto 16px 16px;
+  }
+
+  .cinema-feature-copy strong {
+    font-size: clamp(24px, 7vw, 38px);
+  }
+
+  .cinema-feature-copy p {
+    font-size: 15px;
+    line-height: 1.45;
   }
 }
 
