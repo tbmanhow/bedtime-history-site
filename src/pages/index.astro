@@ -1,6 +1,10 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import PageSections from "@/components/PageSections.astro";
+import BrandStory from "@/components/BrandStory.astro";
+import ContentSection from "@/components/ContentSection.astro";
+import HeroSection from "@/components/HeroSection.astro";
+import NewsletterSection from "@/components/NewsletterSection.astro";
+import ProductShowcase from "@/components/ProductShowcase.astro";
 import PostCard from "@/components/PostCard.astro";
 import AdSlot from "@/components/AdSlot.astro";
 import { categories as fallbackCategories, posts as fallbackPosts, type Category, type Post } from "@/data/content";
@@ -13,116 +17,48 @@ const [homePage, settings, posts, categories] = await Promise.all([
   getAllPosts(),
   getAllCategories()
 ]);
+
 const safePosts = (posts.length ? posts : fallbackPosts) as Post[];
 const safeCategories = (categories.length ? categories : fallbackCategories) as Category[];
 const featured = safePosts.filter((post: Post) => post.featured);
 const heroPost = featured[0] ?? safePosts[0];
 const latest = [...safePosts].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
+const description = homePage?.description || "黑红电影感历史内容站。长文、图片、音频与视频，为睡前听众整理成可反复进入的历史档案。";
 ---
 
-<BaseLayout title={homePage?.title || site.name} description={homePage?.description || site.description} image={heroPost.image} settings={settings}>
-  {homePage?.sections?.length ? (
-    <PageSections sections={homePage.sections} posts={safePosts} categories={safeCategories} />
-  ) : (
-    <>
-  <section class="hero hero-premium">
-    <div class="hero-bg" aria-hidden="true">
-      <img src={heroPost.image} alt="" />
-    </div>
-    <div class="container hero-grid">
-      <div class="hero-content">
-        <p class="eyebrow">睡前历史频道内容库</p>
-        <h1>{site.name}</h1>
-        <p>{site.description}</p>
-        <div class="actions">
-          <a class="button" href={`/articles/${heroPost.slug}/`}>阅读精选</a>
-          <a class="button secondary" href="/categories/">浏览分类</a>
-        </div>
-      </div>
-      <a class="hero-device reveal" href={`/articles/${heroPost.slug}/`} aria-label={`阅读${heroPost.title}`}>
-        <img src={heroPost.image} alt={heroPost.title} />
-        <div class="hero-device-copy">
-          <span>Tonight's Feature</span>
-          <strong>{heroPost.title}</strong>
-        </div>
-      </a>
-    </div>
-    <div class="hero-strip container" aria-label="网站数据">
-      <span>{safePosts.length} 篇样板文章</span>
-      <span>{safeCategories.length} 个历史分类</span>
-      <span>AdSense 预留位</span>
-      <span>Sanity 后台准备中</span>
-    </div>
-  </section>
+<BaseLayout title={homePage?.title || site.name} description={description} image={heroPost.image} settings={settings}>
+  <HeroSection post={heroPost} posts={safePosts} categories={safeCategories} />
+  <BrandStory />
+  <ContentSection posts={safePosts} categories={safeCategories} />
+  <ProductShowcase />
 
-  <section class="immersive-section">
-    <div class="container feature feature-premium reveal">
-      <div>
-        <p class="eyebrow">精选文章</p>
-        <h2>{heroPost.title}</h2>
-        <p>{heroPost.excerpt}</p>
-        <div class="actions compact-actions">
-          <a class="button" href={`/articles/${heroPost.slug}/`}>进入正文</a>
-          <a class="text-link" href="/search/">搜索全部内容</a>
-        </div>
-      </div>
-      <div class="feature-media">
-        <img src={heroPost.image} alt={heroPost.title} />
-      </div>
-    </div>
-  </section>
-
-  <section class="category-band">
-    <div class="container">
-      <div class="section-head centered reveal">
-        <div>
-          <p class="eyebrow">内容分类</p>
-          <h2>像浏览一座历史展馆一样进入主题</h2>
-          <p>中国史、世界史、人物、事件、百科与城市故事，后续都可以通过后台持续扩充。</p>
-        </div>
-      </div>
-      <div class="grid category-grid category-showcase">
-        {safeCategories.map((category: Category) => (
-          <a class="card category-card reveal" href={`/categories/${category.slug}/`}>
-            <img class="card-image" src={category.image} alt={category.name} loading="lazy" />
-            <div class="card-body">
-              <span class="mini-label">Collection</span>
-              <h3>{category.name}</h3>
-              <p>{category.description}</p>
-            </div>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="ad-band">
+  <section class="latest-band noir-band">
     <div class="container">
       <div class="section-head reveal">
         <div>
-          <p class="eyebrow">商业化准备</p>
-          <h2>先让内容好看，再让广告自然出现</h2>
+          <p class="eyebrow">Latest Archive</p>
+          <h2>最近整理的文字、图片和声音</h2>
         </div>
-        <p>第一版只预留位置，不打断阅读体验。等正式域名、原创内容和基础页面稳定后，再接入 AdSense。</p>
-      </div>
-      <AdSlot />
-    </div>
-  </section>
-
-  <section class="latest-band">
-    <div class="container">
-      <div class="section-head reveal">
-        <div>
-          <p class="eyebrow">最新内容</p>
-          <h2>最近整理的文字与图片</h2>
-        </div>
-        <a class="button" href="/search/">搜索文章</a>
+        <a class="button button-dark" href="/search/">搜索全部内容</a>
       </div>
       <div class="grid posts-grid">
         {latest.map((post) => <PostCard post={post} />)}
       </div>
     </div>
   </section>
-    </>
-  )}
+
+  <section class="ad-band noir-ad-band">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow">AdSense Ready</p>
+          <h2>广告位先克制地预留</h2>
+        </div>
+        <p>等原创内容、正式域名、隐私政策和 Google 收录稳定后，再把广告接入，不破坏阅读体验。</p>
+      </div>
+      <AdSlot />
+    </div>
+  </section>
+
+  <NewsletterSection />
 </BaseLayout>

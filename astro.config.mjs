@@ -6,7 +6,7 @@ const projectId = process.env.SANITY_STUDIO_PROJECT_ID || process.env.SANITY_PRO
 const dataset = process.env.SANITY_STUDIO_DATASET || process.env.SANITY_DATASET || "production";
 
 export default defineConfig({
-  site: process.env.SITE_URL || "https://example.com",
+  site: process.env.SITE_URL || "https://lucyhasnomoney.com",
   integrations: [
     sitemap(),
     sanity({

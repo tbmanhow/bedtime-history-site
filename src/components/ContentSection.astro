@@ -1,0 +1,34 @@
+---
+import PostCard from "@/components/PostCard.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import type { Category, Post } from "@/data/content";
+
+type Props = {
+  posts: Post[];
+  categories: Category[];
+};
+
+const { posts, categories } = Astro.props;
+const featuredPosts = posts.filter((post) => post.featured).slice(0, 3);
+---
+
+<section class="content-system-section">
+  <div class="container">
+    <SectionHeading
+      eyebrow="Featured Stories"
+      title="像打开一卷深夜胶片"
+      text="精选内容用更大的版面呈现，让听众先被画面和标题吸引，再进入长文、音频与视频。"
+    />
+    <div class="grid posts-grid cinematic-posts">
+      {featuredPosts.map((post) => <PostCard post={post} />)}
+    </div>
+  </div>
+  <div class="container archive-strip reveal">
+    {categories.map((category) => (
+      <a href={`/categories/${category.slug}/`}>
+        <span>{category.name}</span>
+        <small>{category.description}</small>
+      </a>
+    ))}
+  </div>
+</section>

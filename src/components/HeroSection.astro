@@ -1,0 +1,46 @@
+---
+import AnimatedButton from "@/components/AnimatedButton.astro";
+import type { Category, Post } from "@/data/content";
+import { site } from "@/data/site";
+
+type Props = {
+  post: Post;
+  posts: Post[];
+  categories: Category[];
+};
+
+const { post, posts, categories } = Astro.props;
+---
+
+<section class="cinema-hero">
+  <div class="cinema-hero-bg" aria-hidden="true">
+    <img src={post.image} alt="" />
+  </div>
+  <div class="cinema-grain" aria-hidden="true"></div>
+  <div class="container cinema-hero-inner">
+    <div class="cinema-hero-copy reveal">
+      <p class="eyebrow">Bedtime History Studio</p>
+      <h1>{site.name}</h1>
+      <p class="hero-manifesto">把历史变成睡前的一场电影。</p>
+      <p class="hero-subcopy">{site.description}</p>
+      <div class="hero-actions">
+        <AnimatedButton href={`/articles/${post.slug}/`} label="进入今晚精选" />
+        <AnimatedButton href="/categories/" label="浏览历史档案" variant="secondary" />
+      </div>
+    </div>
+    <a class="cinema-feature-card reveal" href={`/articles/${post.slug}/`} aria-label={`阅读${post.title}`}>
+      <img src={post.image} alt={post.title} />
+      <div class="cinema-feature-copy">
+        <span>Tonight's Feature</span>
+        <strong>{post.title}</strong>
+        <p>{post.excerpt}</p>
+      </div>
+    </a>
+  </div>
+  <div class="container cinema-stats reveal" aria-label="站点概况">
+    <span>{posts.length} 篇历史内容</span>
+    <span>{categories.length} 个主题档案</span>
+    <span>音频 / YouTube 预留</span>
+    <span>AdSense Ready</span>
+  </div>
+</section>
