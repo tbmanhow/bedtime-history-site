@@ -1,0 +1,27 @@
+---
+type Props = {
+  model?: string;
+  apiKey?: string;
+  fallbackLabel?: string;
+};
+
+const {
+  model = import.meta.env.BUILDER_PAGE_MODEL || "page",
+  apiKey = import.meta.env.BUILDER_API_PUBLIC_KEY,
+  fallbackLabel = "Builder.io 尚未配置"
+} = Astro.props;
+const isConfigured = Boolean(apiKey && model);
+---
+
+{isConfigured ? (
+  <div class="builder-page-shell">
+    <builder-component model={model} api-key={apiKey}></builder-component>
+    <script async is:inline src="https://cdn.builder.io/js/webcomponents"></script>
+  </div>
+) : (
+  <div class="builder-fallback">
+    <p class="eyebrow">Visual Builder</p>
+    <h1>{fallbackLabel}</h1>
+    <p>在 Builder.io 创建 Space 后，把 Public API Key 配到环境变量，即可用拖拽式页面编辑器设计页面。</p>
+  </div>
+)}

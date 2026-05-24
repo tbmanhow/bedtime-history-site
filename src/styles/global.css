@@ -1602,6 +1602,42 @@ section {
   cursor: pointer;
 }
 
+.builder-preview-hero {
+  padding-bottom: 30px;
+}
+
+.builder-preview-section {
+  background: #050303;
+}
+
+.builder-page-shell {
+  min-height: 520px;
+}
+
+.builder-fallback {
+  display: grid;
+  min-height: 360px;
+  align-content: center;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-lg);
+  padding: clamp(28px, 5vw, 54px);
+  background:
+    radial-gradient(circle at 80% 20%, rgba(210, 27, 43, 0.18), transparent 24vw),
+    rgba(255, 255, 255, 0.055);
+}
+
+.builder-fallback h1 {
+  margin-bottom: 14px;
+  color: #fff8f4;
+  font-size: clamp(42px, 7vw, 88px);
+}
+
+.builder-fallback p:not(.eyebrow) {
+  max-width: 680px;
+  color: var(--muted);
+  font-size: 18px;
+}
+
 .noir-band {
   background: #090404;
 }
