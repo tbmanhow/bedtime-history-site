@@ -1,0 +1,54 @@
+---
+import BrandStory from "@/components/BrandStory.astro";
+import ContentSection from "@/components/ContentSection.astro";
+import HeroSection from "@/components/HeroSection.astro";
+import NewsletterSection from "@/components/NewsletterSection.astro";
+import ProductShowcase from "@/components/ProductShowcase.astro";
+import PostCard from "@/components/PostCard.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import type { Category, Post } from "@/data/content";
+
+type Props = {
+  heroPost: Post;
+  posts: Post[];
+  categories: Category[];
+};
+
+const { heroPost, posts, categories } = Astro.props;
+const latest = [...posts].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
+---
+
+<HeroSection post={heroPost} posts={posts} categories={categories} />
+<BrandStory />
+<ContentSection posts={posts} categories={categories} />
+<ProductShowcase />
+
+<section class="latest-band noir-band">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <p class="eyebrow">Latest Archive</p>
+        <h2>最近整理的文字、图片和声音</h2>
+      </div>
+      <a class="button button-dark" href="/search/">搜索全部内容</a>
+    </div>
+    <div class="grid posts-grid">
+      {latest.map((post) => <PostCard post={post} />)}
+    </div>
+  </div>
+</section>
+
+<section class="ad-band noir-ad-band">
+  <div class="container">
+    <div class="section-head reveal">
+      <div>
+        <p class="eyebrow">AdSense Ready</p>
+        <h2>广告位先克制地预留</h2>
+      </div>
+      <p>等原创内容、正式域名、隐私政策和 Google 收录稳定后，再把广告接入，不破坏阅读体验。</p>
+    </div>
+    <AdSlot />
+  </div>
+</section>
+
+<NewsletterSection />

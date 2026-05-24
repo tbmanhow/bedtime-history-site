@@ -7,13 +7,17 @@ type Props = {
   description?: string;
   image?: string;
   settings?: any;
+  hideHeader?: boolean;
+  hideFooter?: boolean;
 };
 
 const {
   title = site.name,
   description = site.description,
   image = "/images/chunqiu-greece.jpg",
-  settings = {}
+  settings = {},
+  hideHeader = false,
+  hideFooter = false
 } = Astro.props;
 const pageTitle = title === site.name ? site.name : `${title} | ${site.name}`;
 const canonical = new URL(Astro.url.pathname, Astro.site || site.url).toString();
@@ -64,34 +68,38 @@ const structuredData = {
   </head>
   <body class={bodyClass}>
     <div class="scroll-progress" aria-hidden="true"></div>
-    <header class="site-header">
-      <div class="container header-inner">
-        <a class="brand" href="/" aria-label="回到首页">
-          <strong>{site.name}</strong>
-          <span>{site.tagline}</span>
-        </a>
-        <nav class="nav" aria-label="主导航">
-          {nav.map((item) => <a href={item.href}>{item.label}</a>)}
-          <a href="/contact/">联系</a>
-        </nav>
-      </div>
-    </header>
+    {!hideHeader && (
+      <header class="site-header">
+        <div class="container header-inner">
+          <a class="brand" href="/" aria-label="回到首页">
+            <strong>{site.name}</strong>
+            <span>{site.tagline}</span>
+          </a>
+          <nav class="nav" aria-label="主导航">
+            {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+            <a href="/contact/">联系</a>
+          </nav>
+        </div>
+      </header>
+    )}
     <main>
       <slot />
     </main>
-    <footer class="footer">
-      <div class="container footer-inner">
-        <div>
-          <strong>{site.name}</strong>
-          <p>{site.description}</p>
+    {!hideFooter && (
+      <footer class="footer">
+        <div class="container footer-inner">
+          <div>
+            <strong>{site.name}</strong>
+            <p>{site.description}</p>
+          </div>
+          <div class="footer-links">
+            <a href="/privacy/">隐私政策</a>
+            <a href="/disclaimer/">免责声明</a>
+            <a href="/contact/">联系</a>
+          </div>
         </div>
-        <div class="footer-links">
-          <a href="/privacy/">隐私政策</a>
-          <a href="/disclaimer/">免责声明</a>
-          <a href="/contact/">联系</a>
-        </div>
-      </div>
-    </footer>
+      </footer>
+    )}
     <script>
       const progress = document.querySelector<HTMLElement>(".scroll-progress");
       const updateProgress = () => {

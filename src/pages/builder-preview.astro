@@ -6,17 +6,11 @@ import { getSiteSettings } from "@/lib/sanity";
 const settings = await getSiteSettings();
 ---
 
-<BaseLayout title="Builder 预览" description="Builder.io 可视化页面编辑预览入口。" settings={settings}>
-  <section class="page-hero builder-preview-hero">
-    <div class="container page-intro">
-      <p class="eyebrow">Builder.io</p>
-      <h1>可视化设计预览</h1>
-      <p>这个页面用于 Builder.io Visual Editor 预览。正式接入后，你可以在 Builder 后台拖拽设计页面。</p>
-    </div>
-  </section>
-  <section class="builder-preview-section">
-    <div class="container">
-      <BuilderPage fallbackLabel="等待连接 Builder.io" />
-    </div>
-  </section>
+<BaseLayout
+  title="Builder 首页编辑"
+  description="Builder.io 首页可视化编辑入口。"
+  settings={settings}
+  hideFooter={true}
+>
+  <BuilderPage fallbackLabel="Builder 首页正在等待配置" />
 </BaseLayout>

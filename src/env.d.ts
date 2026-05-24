@@ -4,4 +4,5 @@
 interface ImportMetaEnv {
   readonly BUILDER_API_PUBLIC_KEY?: string;
   readonly BUILDER_PAGE_MODEL?: string;
+  readonly BUILDER_HOMEPAGE_ENABLED?: string;
 }

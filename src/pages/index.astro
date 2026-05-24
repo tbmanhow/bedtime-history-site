@@ -1,12 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import BrandStory from "@/components/BrandStory.astro";
-import ContentSection from "@/components/ContentSection.astro";
-import HeroSection from "@/components/HeroSection.astro";
-import NewsletterSection from "@/components/NewsletterSection.astro";
-import ProductShowcase from "@/components/ProductShowcase.astro";
-import PostCard from "@/components/PostCard.astro";
-import AdSlot from "@/components/AdSlot.astro";
+import BuilderPage from "@/components/BuilderPage.astro";
+import HomePageContent from "@/components/HomePageContent.astro";
 import { categories as fallbackCategories, posts as fallbackPosts, type Category, type Post } from "@/data/content";
 import { getAllCategories, getAllPosts, getPageBySlug, getSiteSettings } from "@/lib/sanity";
 import { site } from "@/data/site";
@@ -22,43 +17,20 @@ const safePosts = (posts.length ? posts : fallbackPosts) as Post[];
 const safeCategories = (categories.length ? categories : fallbackCategories) as Category[];
 const featured = safePosts.filter((post: Post) => post.featured);
 const heroPost = featured[0] ?? safePosts[0];
-const latest = [...safePosts].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
 const description = homePage?.description || "黑红电影感历史内容站。长文、图片、音频与视频，为睡前听众整理成可反复进入的历史档案。";
+const useBuilderHomepage = import.meta.env.BUILDER_HOMEPAGE_ENABLED === "true";
 ---
 
-<BaseLayout title={homePage?.title || site.name} description={description} image={heroPost.image} settings={settings}>
-  <HeroSection post={heroPost} posts={safePosts} categories={safeCategories} />
-  <BrandStory />
-  <ContentSection posts={safePosts} categories={safeCategories} />
-  <ProductShowcase />
-
-  <section class="latest-band noir-band">
-    <div class="container">
-      <div class="section-head reveal">
-        <div>
-          <p class="eyebrow">Latest Archive</p>
-          <h2>最近整理的文字、图片和声音</h2>
-        </div>
-        <a class="button button-dark" href="/search/">搜索全部内容</a>
-      </div>
-      <div class="grid posts-grid">
-        {latest.map((post) => <PostCard post={post} />)}
-      </div>
-    </div>
-  </section>
-
-  <section class="ad-band noir-ad-band">
-    <div class="container">
-      <div class="section-head reveal">
-        <div>
-          <p class="eyebrow">AdSense Ready</p>
-          <h2>广告位先克制地预留</h2>
-        </div>
-        <p>等原创内容、正式域名、隐私政策和 Google 收录稳定后，再把广告接入，不破坏阅读体验。</p>
-      </div>
-      <AdSlot />
-    </div>
-  </section>
-
-  <NewsletterSection />
+<BaseLayout
+  title={homePage?.title || site.name}
+  description={description}
+  image={heroPost.image}
+  settings={settings}
+  hideFooter={useBuilderHomepage}
+>
+  {useBuilderHomepage ? (
+    <BuilderPage fallbackLabel="Builder 首页正在加载" />
+  ) : (
+    <HomePageContent heroPost={heroPost} posts={safePosts} categories={safeCategories} />
+  )}
 </BaseLayout>
