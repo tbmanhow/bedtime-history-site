@@ -1,0 +1,32 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PostCard from "@/components/PostCard.astro";
+import { categories, getPostsByCategory } from "@/data/content";
+import { getSiteSettings } from "@/lib/sanity";
+
+export function getStaticPaths() {
+  return categories.map((category) => ({
+    params: { slug: category.slug },
+    props: { category }
+  }));
+}
+
+const { category } = Astro.props;
+const categoryPosts = getPostsByCategory(category.slug);
+const settings = await getSiteSettings();
+---
+
+<BaseLayout title={category.name} description={category.description} image={category.image} settings={settings}>
+  <section class="page-hero">
+    <div class="container page-intro">
+      <p class="eyebrow">分类</p>
+      <h1>{category.name}</h1>
+      <p>{category.description}</p>
+    </div>
+  </section>
+  <section>
+    <div class="container grid posts-grid">
+      {categoryPosts.map((post) => <PostCard post={post} />)}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,131 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AdSlot from "@/components/AdSlot.astro";
+import PostCard from "@/components/PostCard.astro";
+import { getCategory, posts } from "@/data/content";
+import { getSiteSettings } from "@/lib/sanity";
+
+export function getStaticPaths() {
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post }
+  }));
+}
+
+const { post } = Astro.props;
+const category = getCategory(post.category);
+const related = posts
+  .filter((item) => item.slug !== post.slug && item.category === post.category)
+  .slice(0, 2);
+const settings = await getSiteSettings();
+---
+
+<BaseLayout title={post.title} description={post.excerpt} image={post.image} settings={settings}>
+  <section class="page-hero">
+    <div class="container page-intro">
+      <p class="eyebrow">{category?.name}</p>
+      <h1>{post.title}</h1>
+      <p>{post.subtitle}</p>
+      <div class="meta">
+        <span>{post.date}</span>
+        <span>{post.readMinutes} 分钟阅读</span>
+        {post.tags.map((tag) => <span class="tag">{tag}</span>)}
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="container article-layout">
+      <article>
+        <img class="article-cover" src={post.image} alt={post.title} />
+        {(post.audio?.length || post.video) && (
+          <section class="media-suite reveal" aria-label="音频和视频">
+            <div class="media-suite-head">
+              <div>
+                <p class="eyebrow">听看内容</p>
+                <h2>边听边读，或直接观看视频</h2>
+              </div>
+              <p>为听众和观众保留完整沉浸体验。音频适合睡前收听，视频适合回看画面内容。</p>
+            </div>
+            <div class={`media-grid ${post.video ? "" : "audio-only"}`}>
+              {post.video && (
+                <div class="video-player">
+                  {post.video.youtubeId ? (
+                    <iframe
+                      src={`https://www.youtube.com/embed/${post.video.youtubeId}`}
+                      title={post.video.title}
+                      loading="lazy"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowfullscreen
+                    />
+                  ) : (
+                    <video controls preload="metadata" poster={post.video.poster || post.image}>
+                      <source src={post.video.src} type="video/mp4" />
+                      你的浏览器暂不支持视频播放。
+                    </video>
+                  )}
+                  <div class="player-caption">
+                    <span>Video</span>
+                    <strong>{post.video.title}</strong>
+                  </div>
+                </div>
+              )}
+              {post.audio?.length && (
+                <div class="audio-stack">
+                  {post.audio.map((audio) => (
+                    <div class="audio-player">
+                      <div class="audio-meta">
+                        <span>Audio</span>
+                        <strong>{audio.title}</strong>
+                        {audio.duration && <small>{audio.duration}</small>}
+                      </div>
+                      <audio controls preload="metadata">
+                        <source src={audio.src} type="audio/mpeg" />
+                        你的浏览器暂不支持音频播放。
+                      </audio>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+        <div class="article-body">
+          {post.body.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+      </article>
+      <aside class="sidebar">
+        {(post.audio?.length || post.video) && (
+          <div class="panel media-panel">
+            <h3>本篇媒体</h3>
+            {post.audio?.length && <p>{post.audio.length} 个音频</p>}
+            {post.video && <p>1 个视频</p>}
+          </div>
+        )}
+        <AdSlot label="文章侧边广告位预留" />
+        <div class="panel">
+          <h3>内容来源</h3>
+          <p>样板文章整理自本地素材：{post.sourcePath}</p>
+        </div>
+        <div class="panel">
+          <h3>继续阅读</h3>
+          {related.length ? related.map((item) => <p><a href={`/articles/${item.slug}/`}>{item.title}</a></p>) : <p><a href="/search/">浏览全部文章</a></p>}
+        </div>
+      </aside>
+    </div>
+  </section>
+  {related.length > 0 && (
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">相关推荐</p>
+            <h2>同类内容</h2>
+          </div>
+        </div>
+        <div class="grid posts-grid">
+          {related.map((item) => <PostCard post={item} />)}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>

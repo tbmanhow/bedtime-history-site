@@ -1,0 +1,11 @@
+---
+type Props = {
+  label?: string;
+};
+
+const { label = "广告位预留：AdSense 审核通过后接入" } = Astro.props;
+---
+
+<aside class="ad-slot" aria-label="广告位">
+  {label}
+</aside>

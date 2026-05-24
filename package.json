@@ -1,0 +1,28 @@
+{
+  "name": "bedtime-history-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "studio": "XDG_CONFIG_HOME=.sanity-config sanity dev --host 0.0.0.0",
+    "import:sanity": "node --env-file=.env scripts/import-sample-content.mjs",
+    "build:static-preview": "node scripts/build-static-preview.mjs",
+    "serve:static-preview": "python3 -m http.server 4321 -d dist"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/sitemap": "^3.2.1",
+    "@sanity/astro": "latest",
+    "@sanity/locale-zh-hans": "^2.1.23",
+    "@sanity/vision": "^3.62.3",
+    "astro": "^5.0.0",
+    "lucide-astro": "^0.468.0",
+    "sanity": "^3.62.3",
+    "styled-components": "^6.1.15",
+    "typescript": "^5.6.3"
+  },
+  "devDependencies": {}
+}

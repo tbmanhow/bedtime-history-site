@@ -1,0 +1,31 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { categories, getPostsByCategory } from "@/data/content";
+import { getSiteSettings } from "@/lib/sanity";
+
+const settings = await getSiteSettings();
+---
+
+<BaseLayout title="全部分类" description="浏览睡前历史频道的全部内容分类。" settings={settings}>
+  <section class="page-hero">
+    <div class="container page-intro">
+      <p class="eyebrow">分类</p>
+      <h1>全部历史主题</h1>
+      <p>每个分类都对应后续后台发布的内容入口，适合听众按兴趣继续阅读。</p>
+    </div>
+  </section>
+  <section>
+    <div class="container grid category-grid">
+      {categories.map((category) => (
+        <a class="card" href={`/categories/${category.slug}/`}>
+          <img class="card-image" src={category.image} alt={category.name} loading="lazy" />
+          <div class="card-body">
+            <div class="meta"><span>{getPostsByCategory(category.slug).length} 篇文章</span></div>
+            <h3>{category.name}</h3>
+            <p>{category.description}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

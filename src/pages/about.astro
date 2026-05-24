@@ -1,0 +1,32 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageSections from "@/components/PageSections.astro";
+import { site } from "@/data/site";
+import { categories, posts } from "@/data/content";
+import { getPageBySlug, getSiteSettings } from "@/lib/sanity";
+
+const [page, settings] = await Promise.all([getPageBySlug("about"), getSiteSettings()]);
+---
+
+<BaseLayout title={page?.title || "关于"} description={page?.description || "关于睡前历史频道。"} settings={settings}>
+  {page?.sections?.length ? (
+    <PageSections sections={page.sections} posts={posts} categories={categories} />
+  ) : (
+    <>
+  <section class="page-hero">
+    <div class="container page-intro">
+      <p class="eyebrow">关于频道</p>
+      <h1>{site.name}</h1>
+      <p>{site.tagline}</p>
+    </div>
+  </section>
+  <section>
+    <div class="container article-body">
+      <p>睡前历史是一个面向夜间听众的历史内容频道。网站用于整理频道中的文字稿、封面图、配图和延伸阅读，让听众在听完节目后，也能用文字方式回看内容。</p>
+      <p>网站内容以中国历史、世界历史、历史人物、历史大事、历史百科和城市历史为主。第一版先展示精选样板文章，后续会通过后台持续发布更多稿件。</p>
+      <p>这里不是学术论文库，而是一个尽量把历史讲清楚、讲顺、讲得能读下去的内容空间。</p>
+    </div>
+  </section>
+    </>
+  )}
+</BaseLayout>

@@ -1,0 +1,29 @@
+---
+import type { Post } from "@/data/content";
+import { getCategory } from "@/data/content";
+
+type Props = {
+  post: Post;
+};
+
+const { post } = Astro.props;
+const category = getCategory(post.category);
+---
+
+<article class="card post-card reveal">
+  <a href={`/articles/${post.slug}/`}>
+    <img class="card-image" src={post.image} alt={post.title} loading="lazy" />
+  </a>
+  <div class="card-body">
+    <div class="meta">
+      <span>{category?.name}</span>
+      <span>{post.readMinutes} 分钟阅读</span>
+    </div>
+    <h3><a href={`/articles/${post.slug}/`}>{post.title}</a></h3>
+    <p>{post.excerpt}</p>
+    <div class="meta">
+      {post.tags.slice(0, 3).map((tag) => <span class="tag">{tag}</span>)}
+    </div>
+    <a class="text-link" href={`/articles/${post.slug}/`}>阅读全文</a>
+  </div>
+</article>

@@ -1,0 +1,193 @@
+---
+import AdSlot from "@/components/AdSlot.astro";
+import PostCard from "@/components/PostCard.astro";
+import type { Category, Post } from "@/data/content";
+
+type Props = {
+  sections?: any[];
+  posts: Post[];
+  categories: Category[];
+};
+
+const { sections = [], posts, categories } = Astro.props;
+const sectionClass = (section: any, base = "editable-section") => [
+  base,
+  `section-bg-${section.background || "white"}`,
+  `section-space-${section.spacing || "normal"}`
+].join(" ");
+
+const gridStyle = (section: any) => `--section-columns:${Math.min(Math.max(Number(section.columns || 3), 1), 4)}`;
+const aspectClass = (section: any) => `section-card-aspect-${section.cardAspect || "wide"}`;
+
+const postsByRefs = (refs: any[] = []) => refs
+  .map((ref) => posts.find((post) => post.slug === ref.slug || `post.${post.slug}` === ref._ref))
+  .filter((post): post is Post => Boolean(post));
+
+const selectPosts = (section: any) => {
+  if (section.source === "manual" && section.manualPosts?.length) return postsByRefs(section.manualPosts);
+  if (section.source === "category" && section.category?.slug) return posts.filter((post) => post.category === section.category.slug);
+  if (section.source === "featured" || section.featuredOnly) return posts.filter((post) => post.featured);
+  return [...posts].sort((a, b) => b.date.localeCompare(a.date));
+};
+---
+
+{sections.map((section) => {
+  if (section._type === "heroSection") {
+    const dark = section.style === "dark";
+    return (
+      <section class={`editable-hero ${dark ? "dark" : "light"} section-space-${section.spacing || "normal"}`}>
+        {section.image?.url && <img src={section.image.url} alt="" />}
+        <div class="container editable-hero-inner reveal">
+          {section.eyebrow && <p class="eyebrow">{section.eyebrow}</p>}
+          {section.heading && <h1>{section.heading}</h1>}
+          {section.text && <p>{section.text}</p>}
+          {section.primaryLabel && section.primaryHref && (
+            <div class="actions">
+              <a class="button" href={section.primaryHref}>{section.primaryLabel}</a>
+            </div>
+          )}
+        </div>
+      </section>
+    );
+  }
+
+  if (section._type === "richTextSection") {
+    return (
+      <section class={sectionClass(section, "editable-rich")}>
+        <div class="container article-body reveal">
+          {section.eyebrow && <p class="eyebrow">{section.eyebrow}</p>}
+          {section.heading && <h2>{section.heading}</h2>}
+          {section.body?.map((block: any) => block.text && <p>{block.text}</p>)}
+        </div>
+      </section>
+    );
+  }
+
+  if (section._type === "postGridSection") {
+    const list = selectPosts(section).slice(0, section.limit || 6);
+    return (
+      <section class={sectionClass(section, `latest-band ${aspectClass(section)}`)}>
+        <div class="container">
+          <div class="section-head reveal">
+            <div>
+              {section.eyebrow && <p class="eyebrow">{section.eyebrow}</p>}
+              {section.heading && <h2>{section.heading}</h2>}
+            </div>
+            {section.text && <p>{section.text}</p>}
+          </div>
+          <div class="grid posts-grid section-grid" style={gridStyle(section)}>
+            {list.map((post) => <PostCard post={post} />)}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (section._type === "categoryGridSection") {
+    return (
+      <section class={sectionClass(section, `category-band ${aspectClass(section)}`)}>
+        <div class="container">
+          <div class="section-head centered reveal">
+            <div>
+              {section.eyebrow && <p class="eyebrow">{section.eyebrow}</p>}
+              {section.heading && <h2>{section.heading}</h2>}
+              {section.text && <p>{section.text}</p>}
+            </div>
+          </div>
+          <div class="grid category-grid category-showcase section-grid" style={gridStyle(section)}>
+            {categories.map((category) => (
+              <a class="card category-card reveal" href={`/categories/${category.slug}/`}>
+                <img class="card-image" src={category.image} alt={category.name} loading="lazy" />
+                <div class="card-body">
+                  <span class="mini-label">Collection</span>
+                  <h3>{category.name}</h3>
+                  <p>{category.description}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (section._type === "featureSection") {
+    const imageFirst = section.imageSide === "left";
+    const image = section.image?.url;
+    const media = image && (
+      <div class="feature-media">
+        <img src={image} alt={section.heading || ""} loading="lazy" />
+      </div>
+    );
+    const copy = (
+      <div>
+        {section.eyebrow && <p class="eyebrow">{section.eyebrow}</p>}
+        {section.heading && <h2>{section.heading}</h2>}
+        {section.text && <p>{section.text}</p>}
+        {section.buttonLabel && section.buttonHref && (
+          <div class="actions compact-actions">
+            <a class="button" href={section.buttonHref}>{section.buttonLabel}</a>
+          </div>
+        )}
+      </div>
+    );
+    return (
+      <section class={sectionClass(section, "editable-feature-section")}>
+        <div class="container feature feature-premium reveal">
+          {imageFirst ? media : copy}
+          {imageFirst ? copy : media}
+        </div>
+      </section>
+    );
+  }
+
+  if (section._type === "bannerSection") {
+    return (
+      <section class={sectionClass(section, "editable-banner-section")}>
+        <div class="container">
+          <div class="editable-banner reveal">
+            {section.image?.url && <img src={section.image.url} alt="" loading="lazy" />}
+            <div class="editable-banner-copy">
+              {section.eyebrow && <p class="eyebrow">{section.eyebrow}</p>}
+              {section.heading && <h2>{section.heading}</h2>}
+              {section.text && <p>{section.text}</p>}
+              {section.buttonLabel && section.buttonHref && <a class="button" href={section.buttonHref}>{section.buttonLabel}</a>}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (section._type === "mediaEmbedSection" && section.youtubeId) {
+    return (
+      <section class={sectionClass(section, "editable-media")}>
+        <div class="container reveal">
+          {section.eyebrow && <p class="eyebrow">{section.eyebrow}</p>}
+          {section.heading && <h2>{section.heading}</h2>}
+          <div class="video-player">
+            <iframe
+              src={`https://www.youtube.com/embed/${section.youtubeId}`}
+              title={section.heading || "YouTube video"}
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (section._type === "adSection") {
+    return (
+      <section class={sectionClass(section, "ad-band")}>
+        <div class="container reveal">
+          <AdSlot label={section.label} />
+        </div>
+      </section>
+    );
+  }
+
+  return null;
+})}

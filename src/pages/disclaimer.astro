@@ -1,0 +1,31 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageSections from "@/components/PageSections.astro";
+import { categories, posts } from "@/data/content";
+import { getPageBySlug, getSiteSettings } from "@/lib/sanity";
+
+const [page, settings] = await Promise.all([getPageBySlug("disclaimer"), getSiteSettings()]);
+---
+
+<BaseLayout title={page?.title || "免责声明"} description={page?.description || "睡前历史网站免责声明。"} settings={settings}>
+  {page?.sections?.length ? (
+    <PageSections sections={page.sections} posts={posts} categories={categories} />
+  ) : (
+    <>
+  <section class="page-hero">
+    <div class="container page-intro">
+      <p class="eyebrow">Disclaimer</p>
+      <h1>免责声明</h1>
+      <p>历史内容会尽量保持准确、清晰和可读，但仍可能存在疏漏。</p>
+    </div>
+  </section>
+  <section>
+    <div class="container article-body">
+      <p>本网站内容以历史科普和通俗讲述为目的，不构成专业学术结论或任何法律、投资、医疗等专业建议。</p>
+      <p>文章会尽量参考常见史实和可靠资料进行整理，但由于历史问题本身存在不同解释，部分表述可能采用叙事化方式呈现。</p>
+      <p>如发现事实错误、图片版权问题或引用不当，请通过联系页提供具体信息，我们会核查并及时处理。</p>
+    </div>
+  </section>
+    </>
+  )}
+</BaseLayout>

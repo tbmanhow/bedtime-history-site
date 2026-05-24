@@ -1,0 +1,29 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageSections from "@/components/PageSections.astro";
+import { getAllCategories, getAllPages, getAllPosts, getPageBySlug, getSiteSettings } from "@/lib/sanity";
+
+const reserved = new Set(["articles", "categories", "search", "studio", "about", "contact", "privacy", "disclaimer"]);
+
+export async function getStaticPaths() {
+  const pages = await getAllPages();
+  return pages
+    .filter((page: any) => page.slug && page.slug !== "home" && !reserved.has(page.slug))
+    .map((page: any) => ({
+      params: { pageSlug: page.slug },
+      props: { page }
+    }));
+}
+
+const { page } = Astro.props as { page: any };
+const [fullPage, settings, posts, categories] = await Promise.all([
+  getPageBySlug(page.slug),
+  getSiteSettings(),
+  getAllPosts(),
+  getAllCategories()
+]);
+---
+
+<BaseLayout title={fullPage?.title || page.title} description={fullPage?.description || page.description} settings={settings}>
+  <PageSections sections={fullPage?.sections || []} posts={posts} categories={categories} />
+</BaseLayout>
