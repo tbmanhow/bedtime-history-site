@@ -16,11 +16,28 @@ const featuredPosts = posts.filter((post) => post.featured).slice(0, 3);
   <div class="container">
     <SectionHeading
       eyebrow="Featured Stories"
-      title="像打开一卷深夜胶片"
-      text="精选内容用更大的版面呈现，让听众先被画面和标题吸引，再进入长文、音频与视频。"
+      title="像产品页一样展示每一个重点主题"
+      text="先用大画面和一句清晰标题建立兴趣，再让用户决定进入哪一篇完整内容。"
     />
+    <div class="feature-stack">
+      {featuredPosts.map((post, index) => (
+        <a class={`feature-panel reveal feature-panel-${index + 1}`} href={`/articles/${post.slug}/`}>
+          <div class="feature-panel-copy">
+            <p class="eyebrow">{categories.find((item) => item.slug === post.category)?.name || "精选专题"}</p>
+            <h3>{post.title}</h3>
+            <p>{post.excerpt}</p>
+            <span class="feature-link">查看专题</span>
+          </div>
+          <div class="feature-panel-media">
+            <img src={post.image} alt={post.title} loading="lazy" />
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+  <div class="container compact-posts-band">
     <div class="grid posts-grid cinematic-posts">
-      {featuredPosts.map((post) => <PostCard post={post} />)}
+      {posts.slice(0, 3).map((post) => <PostCard post={post} />)}
     </div>
   </div>
   <div class="container archive-strip reveal">

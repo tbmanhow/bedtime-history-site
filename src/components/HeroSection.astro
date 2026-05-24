@@ -28,14 +28,26 @@ const { post, posts, categories } = Astro.props;
         <AnimatedButton href="/categories/" label="浏览历史档案" variant="secondary" />
       </div>
     </div>
-    <a class="cinema-feature-card reveal" href={`/articles/${post.slug}/`} aria-label={`阅读${post.title}`}>
-      <img src={post.image} alt={post.title} />
-      <div class="cinema-feature-copy">
-        <span>Tonight's Feature</span>
-        <strong>{post.title}</strong>
-        <p>{post.excerpt}</p>
-      </div>
-    </a>
+    <div class="cinema-device-shelf reveal" aria-label="精选内容展示">
+      <a class="cinema-feature-card cinema-feature-primary" href={`/articles/${post.slug}/`} aria-label={`阅读${post.title}`}>
+        <img src={post.image} alt={post.title} />
+        <div class="cinema-feature-copy">
+          <span>Tonight's Feature</span>
+          <strong>{post.title}</strong>
+          <p>{post.excerpt}</p>
+        </div>
+      </a>
+      {posts[1] && (
+        <a class="cinema-feature-card cinema-feature-secondary" href={`/articles/${posts[1].slug}/`} aria-label={`阅读${posts[1].title}`}>
+          <img src={posts[1].image} alt={posts[1].title} />
+          <div class="cinema-feature-copy">
+            <span>Archive Select</span>
+            <strong>{posts[1].title}</strong>
+            <p>{posts[1].excerpt}</p>
+          </div>
+        </a>
+      )}
+    </div>
   </div>
   <div class="container cinema-stats reveal" aria-label="站点概况">
     <span>{posts.length} 篇历史内容</span>
