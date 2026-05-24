@@ -2422,6 +2422,13 @@ section {
   min-height: auto;
 }
 
+/* Hero feature cards should pin imagery to the top instead of centering it */
+.cinema-feature-card img {
+  object-fit: cover;
+  object-position: center top;
+  vertical-align: top;
+}
+
 .noir-band {
   background: #090404;
 }
