@@ -2310,6 +2310,67 @@ section {
   }
 }
 
+/* Unified media frames: 16:9 and full image visibility */
+.card > a,
+.feature-media,
+.feature-panel-media,
+.bh-story-media,
+.bh-feature-card,
+.cinema-feature-card {
+  aspect-ratio: 16 / 9;
+  background: #120606;
+}
+
+.card-image,
+.feature-media img,
+.feature-panel-media img,
+.bh-story-media img,
+.bh-feature-card img,
+.cinema-feature-card img,
+.category-card .card-image,
+.article-cover {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  object-position: center;
+  background: #120606;
+}
+
+.card-image,
+.article-cover,
+.feature-media,
+.feature-panel-media,
+.bh-story-media {
+  border-radius: inherit;
+}
+
+.post-aspect-standard .post-card .card-image,
+.post-aspect-standard .posts-grid .card:not(.category-card) .card-image,
+.post-aspect-square .post-card .card-image,
+.post-aspect-square .posts-grid .card:not(.category-card) .card-image,
+.post-aspect-portrait .post-card .card-image,
+.post-aspect-portrait .posts-grid .card:not(.category-card) .card-image,
+.section-card-aspect-standard .card-image,
+.section-card-aspect-square .card-image,
+.section-card-aspect-portrait .card-image,
+.article-cover-standard .article-cover,
+.article-cover-cinema .article-cover {
+  aspect-ratio: 16 / 9;
+}
+
+.cinema-feature-card,
+.cinema-feature-card img,
+.bh-feature-card,
+.bh-feature-card img {
+  min-height: auto;
+}
+
+.feature-panel-media,
+.bh-story-media {
+  min-height: auto;
+}
+
 .noir-band {
   background: #090404;
 }
