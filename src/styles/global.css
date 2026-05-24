@@ -37,6 +37,7 @@ body {
   font-size: 16px;
   line-height: 1.68;
   letter-spacing: 0;
+  overflow-x: hidden;
 }
 
 a {
@@ -1949,12 +1950,14 @@ section {
   min-height: calc(100vh - 132px);
   padding-top: clamp(64px, 10vw, 120px);
   padding-bottom: clamp(28px, 6vw, 64px);
+  min-width: 0;
 }
 
 .cinema-hero-copy {
   max-width: 760px;
   text-align: center;
   margin: 0 auto;
+  min-width: 0;
 }
 
 .cinema-hero-copy h1 {
@@ -1984,12 +1987,15 @@ section {
   display: grid;
   gap: 18px;
   align-items: start;
+  min-width: 0;
 }
 
 .cinema-feature-card {
   position: relative;
   overflow: hidden;
   min-height: 420px;
+  width: 100%;
+  min-width: 0;
   border-radius: 30px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.05);
@@ -2025,6 +2031,8 @@ section {
   z-index: 2;
   display: grid;
   gap: 8px;
+  min-width: 0;
+  max-width: calc(100% - 48px);
 }
 
 .cinema-feature-copy span {
@@ -2040,11 +2048,15 @@ section {
   color: #fff8f4;
   font-size: clamp(28px, 4vw, 44px);
   line-height: 1;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .cinema-feature-copy p {
   margin-top: 6px;
   color: rgba(255, 248, 244, 0.8);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .cinema-stats {
